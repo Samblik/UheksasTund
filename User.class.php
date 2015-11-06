@@ -86,32 +86,72 @@ class User {
 	
 	
 		function loginUser($email, $password_hash){
+			
+			
+				$response = new StdClass();
+				
+				$stmt = $this->connection->prepare("SELECT email FROM user_sample WHERE email = ?");
+				$stmt->bind_param("s",$email);
+				$stmt->execute();
+				
+				if(!$stmt->fetch()){
+					
+					//Saadan tagasi errori
+					$error = new StdClass();
+					$error->id = 2;
+					$error->message = "Sellinse e-mailiga kasutaja ei eksisteeri!";
+					
+					//panen errori responsile külge
+					$response->error = $error;
+					
+					
+					return $response;
+					
+				}
+				
+				//******************
+				//***OLULINE********
+				//******************
+				
+				//panen eelimse k2su kinni
+				$stmt->close();			
+				
+			
+			
+			
 				$stmt = $this->connection->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
 				$stmt->bind_param("ss", $email, $password_hash); //asnendab küsimärgid
 				
 				//paneme vastused muutujatesse
 				
 				$stmt->bind_result($id_from_db, $email_from_db);
-				$stmt->execute();
-				echo "<br>";
-				
-				if($stmt->fetch()){
+				if($stmt->execute()){
+					//edukalt salvestatud
+					$success = new StdClass();
+					$success->message = "Sai sisse";
 					
-					echo "Kasutaja id=".$id_from_db;
+					$response->success = $success;
 					
 					$_SESSION["id_from_db"] = $id_from_db;
 					$_SESSION["user_email"] = $email_from_db;
 					
-					//suunan kasutaja
-					
 					header("Location: data.php");
+				}else{
+					//midagi l2ks katki
+					$error = new StdClass();
+					$error->id = 5;
+					$error->message = "Midagi l2ks Katki!";
+					
+					$response->error = $error;
+			
+					
 					
 				}
-				else{
-					//tühi, ei leidnud
-					echo "Wrong password or email";
-				}
+				
 				$stmt->close();
+				
+				//saadan tagasi vastuse, kas Sucess või Error
+				return $response;
 				
 		
 		

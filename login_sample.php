@@ -41,11 +41,11 @@
 			}
       // Kui oleme siia jõudnud, võime kasutaja sisse logida
 			if($password_error == "" && $email_error == ""){
-				echo "Võib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
+				
 				
 				$password_hash = hash("sha512", $password);
 				//User klassi sees olev funtsioon
-				$User->loginUser($email, $password_hash);
+				$kek_response = $User->loginUser($email, $password_hash);
 
 				
 			}
@@ -95,6 +95,16 @@
 <body>
 
   <h2>Log in</h2>
+  
+ <?php if(isset($kek_response->error)): ?>
+	<p style="color:red;"><?=$kek_response->error->message; ?>
+	</p>
+  <?php elseif(isset($kek_response->success)): ?>
+  	<p style="color:green;"><?=$kek_response->success->message; ?>
+	</p>
+  
+  <?php endif; ?>
+  
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?><br><br>
   	<input name="password" type="password" placeholder="Parool" value="<?php echo $password; ?>"> <?php echo $password_error; ?><br><br>
