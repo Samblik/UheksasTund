@@ -8,7 +8,15 @@
 	session_start();
  
  
- 
+	//loome anbmebaasi ühenduse
+	
+	$mysqli = new mysqli($servername, $server_username, $server_password, $database);
+	
+	//uus instanst klassist User
+	
+	
+	$User = new User($mysqli);
+	
  
  
  
