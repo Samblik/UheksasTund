@@ -46,6 +46,27 @@
 				$password_hash = hash("sha512", $password);
 				//User klassi sees olev funtsioon
 				$kek_response = $User->loginUser($email, $password_hash);
+				
+				
+				if(isset($kek_response->success)){
+					
+					//var_dump($kek_response);
+					//l2ks edukalt
+					
+					$_SESSION["id_from_db"] = $kek_response->success->user->id;
+					$_SESSION["user_email"] = $kek_response->success->user->email;
+					
+					header("Location: data.php");
+				
+				//******************
+				//***OLULINE********
+				//******************
+				//l6petame php laadimise
+				exit();
+				
+				
+				}
+
 
 				
 			}

@@ -125,17 +125,21 @@ class User {
 				//paneme vastused muutujatesse
 				
 				$stmt->bind_result($id_from_db, $email_from_db);
-				if($stmt->execute()){
+				$stmt->execute();
+				if($stmt->fetch()){
 					//edukalt salvestatud
 					$success = new StdClass();
 					$success->message = "Sai sisse";
 					
+					$user = new StdClass();
+					$user->id = $id_from_db;
+					$user->email = $email_from_db;
+					
+					$success->user = $user;
+					
 					$response->success = $success;
 					
-					$_SESSION["id_from_db"] = $id_from_db;
-					$_SESSION["user_email"] = $email_from_db;
-					
-					header("Location: data.php");
+
 				}else{
 					//midagi l2ks katki
 					$error = new StdClass();
