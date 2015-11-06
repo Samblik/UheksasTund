@@ -1,5 +1,23 @@
  <?php
+	require_once("../konfig_global.php");
+	require_once("User.class.php");
+	
+	$database = "if13_rene_p";
+	
+	//paneme sessiooni k2ima, saame kasutada $_session muutujaid
+	session_start();
  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/* 
 	require_once("../konfig_global.php");
 	$database = "if13_rene_p";
 	
@@ -81,5 +99,8 @@
 		
 		return $message;
 	}
+*/
+
+
 	
  ?>
